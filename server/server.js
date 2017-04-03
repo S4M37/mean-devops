@@ -5,14 +5,40 @@ const http = require('http');
 const bodyParser = require('body-parser');
 
 // Get our API routes
-const api = require('./routes/api');
+const api = require('./routes/user-tracker.api');
 
 const app = express();
 
-// Parsers for POST data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://http://ec2-54-194-223-177.eu-west-1.compute.amazonaws.com:27017/smart-parking', function (err, db) {
 
+  console.log(err);
+  console.log(JSON.stringify(db));
+}); // connect to our database
+
+// Parsers for POST data
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+// middleware to use for all requests
+app.use(function (req, res, next) {
+  // do logging
+  if (req.url.indexOf("api") > -1) {
+
+    console.log('');
+    console.log('###### Request Triggered ######');
+
+    console.log('From :' + req.url);
+    if (req.body !== null) {
+      console.log('With a body content :' + JSON.stringify(req.body));
+    }
+    console.log('###############################');
+    console.log('');
+
+  }
+  next(); // make sure we go to the next routes and don't stop here
+
+});
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
