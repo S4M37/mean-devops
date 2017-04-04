@@ -10,7 +10,7 @@ const api = require('./routes/user-tracker.api');
 const app = express();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://http://ec2-54-194-223-177.eu-west-1.compute.amazonaws.com:27017/smart-parking', function (err, db) {
+mongoose.connect('mongodb://ec2-54-194-223-177.eu-west-1.compute.amazonaws.com:27017/smart-parking', function (err, db) {
 
   console.log(err);
   console.log(JSON.stringify(db));
