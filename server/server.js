@@ -6,16 +6,18 @@ const bodyParser = require('body-parser');
 
 // Get our API routes
 const api = require('./routes/user-tracker.api');
+const elasticApi = require('./routes/elastic.api');
 
 const app = express();
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://ec2-54-154-93-183.eu-west-1.compute.amazonaws.com:27017/smart-parking', function (err, db) {
+/*
+ var mongoose = require('mongoose');
+ mongoose.connect('mongodb://ec2-54-154-93-183.eu-west-1.compute.amazonaws.com:27017/smart-parking', function (err, db) {
 
-  console.log(err);
-  console.log(JSON.stringify(db));
-}); // connect to our database
-
+ console.log(err);
+ console.log(JSON.stringify(db));
+ }); // connect to our database
+ */
 // Parsers for POST data
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -44,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
 app.use('/api', api);
+app.use('/api/elastic', elasticApi);
 
 // Catch all other routes and return the index file
 app.get('*', function (req, res) {
